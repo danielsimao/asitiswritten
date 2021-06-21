@@ -12,9 +12,7 @@ export default function Home() {
         <h2 className="text-2xl md:text-2xl text-gray-600 dark:text-gray-400 mb-16">
           Quick and easy
         </h2>
-        <div>
-          <Search></Search>
-        </div>
+        <Search></Search>
       </div>
     </Container>
   );
