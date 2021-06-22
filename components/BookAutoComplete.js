@@ -1,11 +1,25 @@
 import OldTestmant from '../data/old-testamant';
 import NewTestmant from '../data/new-testamant';
+import Fuse from 'fuse.js';
+
+// desktop autocomplete https://material-ui.com/components/autocomplete/#useautocomplete
 
 export default function BookAutoComplete(props) {
-  const { search, onChange, onSelect, onClear } = props;
+  const { search, onChange, onSelect, onClear, onBack } = props;
+
+  const oldTestmantSearch = new Fuse(OldTestmant, {
+    isCaseSensitive: false,
+    keys: ['book']
+  }).search(search.value);
+  const newTestmantSearch = new Fuse(NewTestmant, {
+    isCaseSensitive: false,
+    keys: ['book']
+  }).search(search.value);
+
+  console.log(oldTestmantSearch, newTestmantSearch);
 
   const OldTestmentItems = OldTestmant.filter((e) =>
-    e.book.toLowerCase().includes(search.value)
+    e.book.toLowerCase().includes(search.value.toLowerCase())
   ).map((item) => (
     <li
       onClick={() =>
@@ -22,7 +36,7 @@ export default function BookAutoComplete(props) {
     </li>
   ));
   const NewTestmentItems = NewTestmant.filter((e) =>
-    e.book.toLowerCase().includes(search.value)
+    e.book.toLowerCase().includes(search.value.toLowerCase())
   ).map((item) => (
     <li
       onClick={() =>
@@ -43,12 +57,28 @@ export default function BookAutoComplete(props) {
     <>
       <div
         style={{ position: 'relative' }}
-        className="px-4 border-t border-gray-200 dark:border-gray-800 relative"
+        className="flex px-2 border-t border-gray-200 dark:border-gray-800 relative"
       >
+        <button onClick={onBack} className="p-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-6 h-6 text-gray-900 dark:text-gray-100"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
         <input
           value={search.value}
           onChange={onChange}
-          className="w-full h-14 outline-none p-0 bg-white dark:bg-black text-gray-900 dark:text-gray-100"
+          className="w-full h-14 outline-none pl-2 pr-6 bg-white dark:bg-black text-gray-900 dark:text-gray-100"
           placeholder="Search..."
         ></input>
         <button
@@ -77,7 +107,7 @@ export default function BookAutoComplete(props) {
           </svg>
         </button>
       </div>
-      <div className="search-list h-80 text-gray-900 dark:text-gray-100 overflow-y-auto">
+      <div className="search-list h-full text-gray-900 dark:text-gray-100 overflow-y-auto">
         <ul>
           <li>
             <div className="text-xs px-5 py-1 bg-gray-800">Old Testmant</div>

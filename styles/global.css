@@ -211,6 +211,9 @@ table {
 [data-reach-dialog-content] {
   @apply border border-gray-200 bg-white dark:bg-black dark:border-gray-800 rounded;
   padding: 0 !important;
+  margin: 0 !important;
+  width: 100vw !important;
+  height: 100vh;
 }
 
 [data-reach-dialog-content] .search-list {

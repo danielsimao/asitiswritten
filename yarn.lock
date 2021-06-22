@@ -2329,6 +2329,11 @@
   "resolved" "https://registry.npmjs.org/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz"
   "version" "1.0.1"
 
+"fuse.js@^6.4.6":
+  "integrity" "sha512-/gYxR/0VpXmWSfZOIPS3rWwU8SHgsRTwWuXhyb2O6s7aRuVtHtxCkR33bNYu3wyLyNx/Wpv0vU7FZy8Vj53VNw=="
+  "resolved" "https://registry.npmjs.org/fuse.js/-/fuse.js-6.4.6.tgz"
+  "version" "6.4.6"
+
 "gaxios@^4.0.0":
   "integrity" "sha512-Ms7fNifGv0XVU+6eIyL9LB7RVESeML9+cMvkwGS70xyD6w2Z80wl6RiqiJ9k1KFlJCUTQqFFc8tXmPQfSKUe8g=="
   "resolved" "https://registry.npmjs.org/gaxios/-/gaxios-4.2.0.tgz"
