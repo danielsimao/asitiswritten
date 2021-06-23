@@ -213,9 +213,5 @@ table {
   padding: 0 !important;
   margin: 0 !important;
   width: 100vw !important;
-  height: 100vh;
-}
-
-[data-reach-dialog-content] .search-list {
-  -webkit-overflow-scrolling: touch;
+  height: 100vh !important;
 }

@@ -1,12 +1,13 @@
 export default function ChapterBoard(props) {
-  const { search, onBack, onSelect } = props;
+  const { value, book, onBack, onSelect, onSearch } = props;
+
   return (
-    <>
-      <div className="flex justify-between items-center px-4 w-full h-10 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-800">
-        <button onClick={onBack} className={`w-10 h-10`}>
+    <div className="relative py-14 h-full">
+      <div className="flex justify-between items-center h-14 px-2 border border-gray-200 dark:border-gray-800 fixed inset-0 w-full">
+        <button onClick={onBack} className="p-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            style={{ height: 24, width: 24 }}
+            className="w-6 h-6 text-gray-900 dark:text-gray-100"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -14,31 +15,40 @@ export default function ChapterBoard(props) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
             />
           </svg>
         </button>
-        <span>
-          Choose a chapter of <strong>{search.value}</strong>
-        </span>
+        <div className="font-bold self-center text-lg text-gray-900 dark:text-gray-100">
+          {book.name}
+        </div>
         <span className="w-10 h-10 inline-block"></span>
       </div>
-
-      <div
-        style={{ flexWrap: 'wrap' }}
-        className="flex justify-center gap-4 p-4"
-      >
-        {[...Array(search.chapters)].map((_, i) => (
-          <button
-            onClick={() => onSelect(i + 1)}
-            key={i}
-            className="font-bold h-10 text-gray-900 dark:text-gray-100 rounded w-10"
-          >
-            {i + 1}
-          </button>
-        ))}
+      <div className="p-4 overflow-y-auto h-full pb-14">
+        <div className="flex flex-wrap justify-center gap-4">
+          {[...Array(book.chapters)].map((_, i) => (
+            <div
+              onClick={() => onSelect(i + 1)}
+              key={i}
+              className={`flex items-center justify-center font-bold h-12 w-12 text-gray-900 dark:text-gray-100 rounded-full w-10 ${
+                value === i + 1 ? 'bg-gray-200 dark:bg-gray-800' : ''
+              }`}
+            >
+              {i + 1}
+            </div>
+          ))}
+        </div>
       </div>
-    </>
+      <div className="flex justify-between items-center h-14 px-2 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100 fixed left-0 bottom-0 z-10 w-full">
+        <button
+          style={{ opacity: !value ? 0.5 : '' }}
+          onClick={value ? onSearch : null}
+          className="border border-gray-300 dark:border-gray-900 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-2 w-full"
+        >
+          Search
+        </button>
+      </div>
+    </div>
   );
 }

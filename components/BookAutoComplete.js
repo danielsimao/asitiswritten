@@ -4,61 +4,44 @@ import Fuse from 'fuse.js';
 
 // desktop autocomplete https://material-ui.com/components/autocomplete/#useautocomplete
 
+function AutoCompleteItem(props) {
+  const { book, onSelect } = props;
+  return (
+    <li onClick={() => onSelect(book)} className="px-4 h-14 flex items-center">
+      {book.name}
+    </li>
+  );
+}
+
 export default function BookAutoComplete(props) {
-  const { search, onChange, onSelect, onClear, onBack } = props;
+  const { value, onChange, onSelect, onClear, onBack } = props;
 
-  const oldTestmantSearch = new Fuse(OldTestmant, {
-    isCaseSensitive: false,
-    keys: ['book']
-  }).search(search.value);
-  const newTestmantSearch = new Fuse(NewTestmant, {
-    isCaseSensitive: false,
-    keys: ['book']
-  }).search(search.value);
+  // const oldTestmantSearch = new Fuse(OldTestmant, {
+  //   isCaseSensitive: false,
+  //   keys: ['book']
+  // }).search(search.value);
+  // const newTestmantSearch = new Fuse(NewTestmant, {
+  //   isCaseSensitive: false,
+  //   keys: ['book']
+  // }).search(search.value);
 
-  console.log(oldTestmantSearch, newTestmantSearch);
+  // console.log(oldTestmantSearch, newTestmantSearch);
 
-  const OldTestmentItems = OldTestmant.filter((e) =>
-    e.book.toLowerCase().includes(search.value.toLowerCase())
-  ).map((item) => (
-    <li
-      onClick={() =>
-        onSelect({
-          testament: 'Old',
-          value: item.book,
-          chapters: item.chapters
-        })
-      }
-      key={item.book}
-      className="px-4 h-14 flex items-center"
-    >
-      {item.book}
-    </li>
+  const OldTestmentItems = OldTestmant.filter((book) =>
+    book.name.toLowerCase().includes(value.toLowerCase())
+  ).map((book) => (
+    <AutoCompleteItem key={book.name} book={book} onSelect={onSelect} />
   ));
-  const NewTestmentItems = NewTestmant.filter((e) =>
-    e.book.toLowerCase().includes(search.value.toLowerCase())
-  ).map((item) => (
-    <li
-      onClick={() =>
-        onSelect({
-          testament: 'New',
-          value: item.book,
-          chapters: item.chapters
-        })
-      }
-      key={item.book}
-      className="px-4 h-14 flex items-center"
-    >
-      {item.book}
-    </li>
+
+  const NewTestmentItems = NewTestmant.filter((book) =>
+    book.name.toLowerCase().includes(value.toLowerCase())
+  ).map((book) => (
+    <AutoCompleteItem key={book.name} book={book} onSelect={onSelect} />
   ));
 
   return (
     <>
-      <div
-        style={{ position: 'relative' }}
-        className="flex px-2 border-t border-gray-200 dark:border-gray-800 relative"
-      >
+      <div className="flex px-2 border border-gray-200 dark:border-gray-800 relative">
         <button onClick={onBack} className="p-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,8 +59,9 @@ export default function BookAutoComplete(props) {
           </svg>
         </button>
         <input
-          value={search.value}
-          onChange={onChange}
+          autoFocus
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
           className="w-full h-14 outline-none pl-2 pr-6 bg-white dark:bg-black text-gray-900 dark:text-gray-100"
           placeholder="Search..."
         ></input>
@@ -88,7 +72,7 @@ export default function BookAutoComplete(props) {
             top: '50%',
             right: 10,
             transform: 'translate(0,-50%)',
-            visibility: search.value ? '' : 'hidden'
+            visibility: value ? '' : 'hidden'
           }}
         >
           <svg
@@ -107,14 +91,21 @@ export default function BookAutoComplete(props) {
           </svg>
         </button>
       </div>
-      <div className="search-list h-full text-gray-900 dark:text-gray-100 overflow-y-auto">
+      <div
+        style={{ flex: '1 1 auto', overflow: 'auto' }}
+        className="search-list text-gray-900 dark:text-gray-100 h-full w-full overflow-y-auto pb-14"
+      >
         <ul>
           <li>
-            <div className="text-xs px-5 py-1 bg-gray-800">Old Testmant</div>
+            <div className="text-xs px-5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+              Old Testmant
+            </div>
             <ul>{OldTestmentItems}</ul>
           </li>
           <li>
-            <div className="text-xs px-5 py-1 bg-gray-800">New Testmant</div>
+            <div className="text-xs px-5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+              New Testmant
+            </div>
             <ul>{NewTestmentItems}</ul>
           </li>
         </ul>

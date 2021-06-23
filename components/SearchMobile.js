@@ -3,18 +3,46 @@ import '@reach/dialog/styles.css';
 import { useState } from 'react';
 import BookAutoComplete from './BookAutoComplete';
 import ChapterBoard from './ChapterBoard';
+import { useRouter } from 'next/router';
 
 export default function SearchMobile() {
+  const router = useRouter();
   const [isOpen, setOpen] = useState(false);
-  const [search, setSearch] = useState({
-    value: '',
-    testament: null,
-    chapters: null,
+  const [search, setSearch] = useState('');
+  const [form, setForm] = useState({
+    book: null,
     chapter: null
   });
   const [step, setStep] = useState(0);
 
-  console.log(isOpen);
+  function handleBookSelect(book) {
+    setForm({ book });
+    setStep(1);
+  }
+
+  function handleChapterSelect(chapter) {
+    setForm((s) => ({ ...s, chapter }));
+  }
+
+  function handleSearchClear() {
+    setSearch('');
+  }
+
+  function handleBack() {
+    if (step === 0) {
+      setOpen(false);
+    } else {
+      setStep((s) => s - 1);
+    }
+  }
+
+  function handleChange(value) {
+    setSearch(value);
+  }
+
+  function handleSearch() {
+    router.push(`acf/${form.book.name.toLowerCase()}/${form.chapter}`);
+  }
 
   return (
     <>
@@ -51,26 +79,20 @@ export default function SearchMobile() {
         <DialogContent aria-label="search-dialog" className="overflow-hidden">
           {step === 0 ? (
             <BookAutoComplete
-              onBack={() => setOpen(false)}
-              onClear={() => setSearch({ value: '' })}
-              search={search}
-              onSelect={(e) => {
-                setSearch(e);
-                setStep(1);
-              }}
-              onChange={(e) => setSearch({ value: e.target.value })}
+              onBack={handleBack}
+              onClear={handleSearchClear}
+              value={search}
+              onSelect={handleBookSelect}
+              onChange={handleChange}
             />
           ) : null}
           {step === 1 ? (
             <ChapterBoard
-              onBack={() => {
-                setStep(0);
-              }}
-              onSelect={(c) => {
-                setSearch((e) => ({ ...e, chapter: c }));
-                setIsOpen(false);
-              }}
-              search={search}
+              value={form.chapter}
+              book={form.book}
+              onBack={handleBack}
+              onSelect={handleChapterSelect}
+              onSearch={handleSearch}
             />
           ) : null}
         </DialogContent>
