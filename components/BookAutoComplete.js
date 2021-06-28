@@ -91,10 +91,7 @@ export default function BookAutoComplete(props) {
           </svg>
         </button>
       </div>
-      <div
-        style={{ flex: '1 1 auto', overflow: 'auto' }}
-        className="search-list text-gray-900 dark:text-gray-100 h-full w-full overflow-y-auto pb-14"
-      >
+      <div className="text-gray-900 dark:text-gray-100 h-full w-full overflow-y-auto pb-14">
         <ul>
           <li>
             <div className="text-xs px-5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">

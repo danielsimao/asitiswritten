@@ -203,15 +203,3 @@ table {
   display: block;
   overflow-y: scroll;
 }
-
-[data-reach-dialog-overlay] {
-  z-index: 10;
-}
-
-[data-reach-dialog-content] {
-  @apply border border-gray-200 bg-white dark:bg-black dark:border-gray-800 rounded;
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-}

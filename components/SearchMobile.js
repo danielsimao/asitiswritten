@@ -1,9 +1,8 @@
-import { DialogContent, DialogOverlay } from '@reach/dialog';
-import '@reach/dialog/styles.css';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import BookAutoComplete from './BookAutoComplete';
 import ChapterBoard from './ChapterBoard';
 import { useRouter } from 'next/router';
+import Modal from './Modal';
 
 export default function SearchMobile() {
   const router = useRouter();
@@ -11,7 +10,8 @@ export default function SearchMobile() {
   const [search, setSearch] = useState('');
   const [form, setForm] = useState({
     book: null,
-    chapter: null
+    chapter: null,
+    complete: false
   });
   const [step, setStep] = useState(0);
 
@@ -20,9 +20,9 @@ export default function SearchMobile() {
     setStep(1);
   }
 
-  function handleChapterSelect(chapter) {
-    setForm((s) => ({ ...s, chapter }));
-  }
+  const handleChapterSelect = (chapter) => {
+    setForm((s) => ({ ...s, chapter, complete: true }));
+  };
 
   function handleSearchClear() {
     setSearch('');
@@ -40,15 +40,24 @@ export default function SearchMobile() {
     setSearch(value);
   }
 
-  function handleSearch() {
-    router.push(`acf/${form.book.name.toLowerCase()}/${form.chapter}`);
-  }
+  const handleSearch = useCallback(
+    (form) => {
+      router.push(`acf/${form.book.name.toLowerCase()}/${form.chapter}`);
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    if (form.complete) {
+      handleSearch(form);
+    }
+  }, [form, form.complete, handleSearch]);
 
   return (
     <>
       <div
         onClick={() => setOpen(true)}
-        className="flex w-full rounded-md bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-full relative px-1 py-2"
+        className="flex w-full rounded-md bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-full relative px-1 py-2 md:hidden"
       >
         <input
           readOnly
@@ -75,28 +84,26 @@ export default function SearchMobile() {
           What are you searching?
         </div>
       </div>
-      <DialogOverlay isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
-        <DialogContent aria-label="search-dialog" className="overflow-hidden">
-          {step === 0 ? (
-            <BookAutoComplete
-              onBack={handleBack}
-              onClear={handleSearchClear}
-              value={search}
-              onSelect={handleBookSelect}
-              onChange={handleChange}
-            />
-          ) : null}
-          {step === 1 ? (
-            <ChapterBoard
-              value={form.chapter}
-              book={form.book}
-              onBack={handleBack}
-              onSelect={handleChapterSelect}
-              onSearch={handleSearch}
-            />
-          ) : null}
-        </DialogContent>
-      </DialogOverlay>
+      <Modal isOpen={isOpen}>
+        {step === 0 ? (
+          <BookAutoComplete
+            onBack={handleBack}
+            onClear={handleSearchClear}
+            value={search}
+            onSelect={handleBookSelect}
+            onChange={handleChange}
+          />
+        ) : null}
+        {step === 1 ? (
+          <ChapterBoard
+            value={form.chapter}
+            book={form.book}
+            onBack={handleBack}
+            onSelect={handleChapterSelect}
+            onSearch={handleSearch}
+          />
+        ) : null}
+      </Modal>
     </>
   );
 }
