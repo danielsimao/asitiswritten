@@ -1,8 +1,5 @@
-import { useState } from 'react';
-
 import { useRouter } from 'next/router';
-import BookAutoComplete from './BookAutoComplete';
-import ChapterBoard from './ChapterBoard';
+import { useCallback, useState } from 'react';
 
 export default function Search(props) {
   const router = useRouter();
@@ -10,7 +7,8 @@ export default function Search(props) {
   const [search, setSearch] = useState('');
   const [form, setForm] = useState({
     book: null,
-    chapter: null
+    chapter: null,
+    complete: false
   });
   const [step, setStep] = useState(0);
 
@@ -19,10 +17,9 @@ export default function Search(props) {
     setStep(1);
   }
 
-  function handleChapterSelect(chapter) {
-    setForm((s) => ({ ...s, chapter }));
-    handleSearch();
-  }
+  const handleChapterSelect = (chapter) => {
+    setForm((s) => ({ ...s, chapter, complete: true }));
+  };
 
   function handleSearchClear() {
     setSearch('');
@@ -40,9 +37,12 @@ export default function Search(props) {
     setSearch(value);
   }
 
-  function handleSearch() {
-    router.push(`acf/${form.book.name.toLowerCase()}/${form.chapter}`);
-  }
+  const handleSearch = useCallback(
+    (form) => {
+      router.push(`acf/${form.book.name.toLowerCase()}/${form.chapter}`);
+    },
+    [router]
+  );
 
   return (
     <div className=" hidden md:flex rounded-md bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-full">
