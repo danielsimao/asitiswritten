@@ -84,7 +84,7 @@ export default function SearchMobile() {
           What are you searching?
         </div>
       </div>
-      <Modal fullscreen isOpen={isOpen}>
+      <Modal className="fixed h-full w-full" fullscreen isOpen={isOpen}>
         {step === 0 ? (
           <BookAutoComplete
             onBack={handleBack}

@@ -16,7 +16,12 @@ const CustomLink = (props) => {
 };
 
 const MDXComponents = {
-  a: CustomLink
+  a: CustomLink,
+  p: (props) => (
+    <p>
+      <span {...props}></span>
+    </p>
+  )
 };
 
 export default MDXComponents;
