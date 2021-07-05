@@ -34,8 +34,6 @@ export default function Search(props) {
     setOpen(true);
   }
 
-  console.log(isOpen, step);
-
   function handleChapterSelect(chapter) {
     setForm((s) => ({ ...s, chapter, complete: true }));
   }

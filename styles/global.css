@@ -177,17 +177,20 @@ table {
   overflow-y: scroll;
 }
 
-.prose p .highlight {
+.prose p .highlight,
+.prose p ::selection {
   @apply bg-black dark:bg-white text-white dark:text-black rounded;
 }
 
 .prose p span {
-  @apply py-1;
+  @apply py-2;
 }
 
 .prose p {
   margin: 0 !important;
   cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .prose p strong {
