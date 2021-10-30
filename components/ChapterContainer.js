@@ -1,8 +1,6 @@
 import { useTheme } from 'next-themes';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import Search from './Search';
-import SearchMobile from './SearchMobile';
 
 export default function Container(props) {
   const [mounted, setMounted] = useState(false);

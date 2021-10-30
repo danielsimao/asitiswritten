@@ -1,6 +1,4 @@
 import Container from '../components/Container';
-import Search from '../components/Search';
-import SearchMobile from '../components/SearchMobile';
 
 export default function Home() {
   return (
@@ -9,8 +7,6 @@ export default function Home() {
         <h1 className="font-bold text-3xl md:text-5xl tracking-tight text-black dark:text-white mb-16">
           As It Is Written
         </h1>
-        <SearchMobile></SearchMobile>
-        <Search></Search>
       </div>
     </Container>
   );

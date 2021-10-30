@@ -20,6 +20,7 @@ export default function Blog({ mdxSource, frontMatter }) {
 
 export async function getStaticPaths() {
   const paths = await getBiblePaths();
+
   return {
     paths,
     fallback: false
