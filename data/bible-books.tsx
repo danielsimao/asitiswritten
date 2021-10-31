@@ -1,4 +1,12 @@
-const books = [
+interface BibleBook {
+  id: string;
+  book_pt: string;
+  book: string;
+  code: string;
+  chapters: number;
+}
+
+const books: BibleBook[] = [
   {
     id: '28',
     book_pt: 'Gênesis',
