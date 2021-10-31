@@ -1,11 +1,8 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
 
-import Footer from '@/components/Footer';
-
-export default function Container(props) {
+export default function Container(props: any) {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -13,11 +10,9 @@ export default function Container(props) {
   useEffect(() => setMounted(true), []);
 
   const { children, ...customMeta } = props;
-  const router = useRouter();
   const meta = {
     title: 'As It Is Written',
     description: `Bible`,
-    image: 'https://leerob.io/static/images/banner.png',
     type: 'website',
     ...customMeta
   };
@@ -28,15 +23,12 @@ export default function Container(props) {
         <title>{meta.title}</title>
         <meta name="robots" content="follow, index" />
         <meta content={meta.description} name="description" />
-        <meta property="og:url" content={`https://leerob.io${router.asPath}`} />
-        <link rel="canonical" href={`https://leerob.io${router.asPath}`} />
         <meta property="og:type" content={meta.type} />
         <meta property="og:site_name" content="Lee Robinson" />
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.image} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@leeerob" />
         <meta name="twitter:title" content={meta.title} />
         <meta name="twitter:description" content={meta.description} />
         <meta name="twitter:image" content={meta.image} />
