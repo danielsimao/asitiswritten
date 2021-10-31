@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 module.exports = {
   future: {
     webpack5: true,
@@ -7,12 +8,6 @@ module.exports = {
   experimental: {
     turboMode: true,
     eslint: true
-  },
-  images: {
-    domains: [
-      'i.scdn.co', // Spotify Album Art
-      'pbs.twimg.com' // Twitter Profile Picture
-    ]
   },
   async headers() {
     return [
@@ -25,7 +20,6 @@ module.exports = {
   webpack: (config, { dev, isServer }) => {
     if (isServer) {
       require('./scripts/generate-sitemap');
-      require('./scripts/generate-rss');
     }
 
     // Replace React with Preact only in client production build

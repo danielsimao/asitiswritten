@@ -1,4 +1,6 @@
-export default function ErrorMessage({ children }) {
+import { PropsWithChildren } from 'react';
+
+export default function ErrorMessage({ children }: PropsWithChildren<unknown>) {
   return (
     <p className="flex items-center text-sm font-bold text-red-800 dark:text-red-400">
       <svg

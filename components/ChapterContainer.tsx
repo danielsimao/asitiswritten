@@ -2,7 +2,7 @@ import { useTheme } from 'next-themes';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
-export default function Container(props) {
+export default function Container(props: any) {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
