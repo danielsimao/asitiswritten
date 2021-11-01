@@ -1,8 +1,10 @@
 import { useTheme } from 'next-themes';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 export default function Container(props: any) {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -37,6 +39,12 @@ export default function Container(props: any) {
         )}
       </Head>
       <nav className="flex items-center justify-between w-full max-w-4xl p-8 mx-auto my-0 text-gray-900 bg-white sticky-nav md:my-8 dark:bg-black bg-opacity-60 dark:text-gray-100">
+        <button
+          onClick={() => router.push('/')}
+          className="text-4xl w-12 h-12 font-bold"
+        >
+          B.
+        </button>
         <button
           aria-label="Toggle Dark Mode"
           type="button"

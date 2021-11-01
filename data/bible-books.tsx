@@ -1,4 +1,4 @@
-interface BibleBook {
+export interface BibleBook {
   id: string;
   book_pt: string;
   book: string;

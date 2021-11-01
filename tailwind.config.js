@@ -2,7 +2,12 @@ const { spacing, fontFamily } = require('tailwindcss/defaultTheme');
 
 module.exports = {
   mode: 'jit',
-  purge: ['./pages/**/*.tsx', './components/**/*.tsx', './layouts/**/*.tsx'],
+  purge: [
+    './pages/**/*.tsx',
+    './components/**/*.tsx',
+    './components/**/*.module.css',
+    './layouts/**/*.tsx'
+  ],
   darkMode: 'class',
   theme: {
     extend: {
@@ -71,7 +76,10 @@ module.exports = {
             }
           }
         }
-      })
+      }),
+      boxShadow: {
+        search: 'rgb(0 0 0 / 30%) 0px 6px 20px;'
+      }
     }
   },
   variants: {

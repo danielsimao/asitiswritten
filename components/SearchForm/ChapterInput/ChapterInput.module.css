@@ -1,0 +1,11 @@
+.search-popover[data-reach-combobox-popover] {
+  @apply rounded-xl bg-white absolute mt-5 py-4;
+  overflow: hidden;
+  right: 0;
+  left: 0;
+}
+
+:global(.dark) .search-popover[data-reach-combobox-popover] {
+  @apply border-0 bg-gray-800;
+  overflow: hidden;
+}

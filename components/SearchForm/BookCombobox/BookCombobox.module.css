@@ -1,0 +1,42 @@
+.search-popover[data-reach-combobox-popover] {
+  @apply rounded-xl bg-white absolute mt-5;
+  overflow: hidden;
+  left: 0;
+  right: 55%;
+}
+
+:global(.dark) .search-popover[data-reach-combobox-popover] {
+  @apply border-0 bg-gray-800;
+  overflow: hidden;
+}
+
+.search-list[data-reach-combobox-list] {
+  @apply border-gray-300 rounded-md hidden md:block;
+
+  max-height: 300px;
+  overflow: auto;
+}
+
+:global(.dark) .search-list[data-reach-combobox-list] {
+  @apply border-0;
+}
+
+.search-list-item[data-reach-combobox-option] {
+  @apply text-base bg-white text-gray-900;
+  padding: 0.5rem 0.75rem;
+}
+
+:global(.dark) .search-list-item[data-reach-combobox-option] {
+  @apply bg-gray-800 text-gray-100;
+}
+
+.search-list-item:hover,
+.search-list-item[data-reach-combobox-option][aria-selected='true'] {
+  @apply bg-gray-100;
+}
+
+:global(.dark) .search-list-item:hover,
+:global(.dark)
+  .search-list-item[data-reach-combobox-option][aria-selected='true'] {
+  @apply bg-gray-900;
+}
