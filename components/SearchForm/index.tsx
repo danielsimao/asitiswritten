@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
-import books from '../../data/bible-books';
+import { useEffect, useRef, useState } from 'react';
+import books, { BibleBook } from '../../data/bible-books';
 import { findBookByName } from '../../utils';
 import BookCombobox, { BookComboboxProps } from './BookCombobox';
 import ChapterInput from './ChapterInput';
@@ -11,30 +11,52 @@ const normalizedBooks = books.map((book) => ({
   book_pt_norm: book.book_pt.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }));
 
-export default function Search() {
+export type SearchForm = { book: BibleBook; chapter: number };
+
+export default function Search({
+  book: _book,
+  chapter
+}: {
+  book?: string;
+  chapter?: number;
+}) {
   const router = useRouter();
 
   const [hasDivider, setDividerVisiblity] = useState(true);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [book, setBook] = useState<string>();
+  const [book, setBook] = useState<string | undefined>(_book);
 
   const formRef = useRef<HTMLFormElement>(null);
   const comboboxRef = useRef<HTMLInputElement>(null);
   const chapterInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCompleteForm = (form: SearchForm) => {
+    router.push(`/acf/${form.book?.code.toLowerCase()}/${form.chapter}`);
+  };
 
   async function handleSubmit(e: any) {
     e.preventDefault();
 
     const body = {
       book: e.currentTarget.book.value,
-      chapter: e.currentTarget.chapter.value
+      chapter: Number(e.currentTarget.chapter.value)
     };
+
+    if (!body.book) {
+      return comboboxRef.current?.focus();
+    }
 
     const book = findBookByName(body.book, books, true);
 
-    if (!book) return;
+    if (!book) {
+      return;
+    }
 
-    router.push(`/acf/${book?.code.toLowerCase()}/${body.chapter}`);
+    if (!body.chapter || body.chapter < 0 || body.chapter > book.chapters) {
+      return;
+    }
+
+    handleCompleteForm({ book, chapter: body.chapter });
   }
 
   function handleComboboxSelect(item: string) {
@@ -69,7 +91,12 @@ export default function Search() {
   //   }
   // }
 
-  const labelClassName = 'text-sm text-gray-900 dark:text-gray-100';
+  useEffect(() => {
+    setBook(_book);
+  }, [_book]);
+
+  const labelClassName =
+    'text-xs text-gray-900 dark:text-gray-100 font-semibold';
 
   return (
     <div className="border border-gray-300 dark:border-gray-800 rounded-lg md:rounded-full w-full md:w-auto bg-white dark:bg-gray-800">
@@ -79,7 +106,7 @@ export default function Search() {
         onSubmit={handleSubmit}
         className="flex flex-auto flex-col md:flex-row relative"
       >
-        <div className="pl-4 md:pl-8 pr-4 py-2 md:rounded-full md:focus-within:shadow-search">
+        <div className="pl-4 md:pl-8 pr-4 py-2 md:rounded-full md:focus-within:shadow-[0px_6px_20px_rgb(0,0,0,0.3)] flex flex-col justify-center gap-1">
           <label className={labelClassName} htmlFor="book">
             Livro
           </label>
@@ -87,9 +114,10 @@ export default function Search() {
             onClick={() => setDialogOpen(true)}
             readOnly
             placeholder="O que vai ler?"
-            className="text-base w-full md:w-auto block md:hidden text-gray-900 dark:text-gray-100 bg-transparent outline-none"
+            className="text-sm w-full md:w-auto block md:hidden text-gray-900 dark:text-gray-100 bg-transparent outline-none"
           />
           <BookCombobox
+            value={book}
             onChange={handleChange}
             onFocus={() => setDividerVisiblity(false)}
             onBlur={() => setDividerVisiblity(true)}
@@ -103,12 +131,13 @@ export default function Search() {
             !hasDivider ? 'md:invisible' : ''
           }`}
         />
-        <div className="flex flex-col md:flex-row md:rounded-full md:focus-within:shadow-search">
-          <div className="px-4 py-2">
+        <div className="flex flex-col md:flex-row md:rounded-full md:focus-within:shadow-[0px_6px_20px_rgb(0,0,0,0.3)]">
+          <div className="px-4 py-2 flex flex-col justify-center gap-1">
             <label className={labelClassName} htmlFor="chapter">
               Capítulo
             </label>
             <ChapterInput
+              value={chapter}
               inputRef={chapterInputRef}
               onClick={() => {
                 if (!book) {
@@ -127,7 +156,7 @@ export default function Search() {
           </div>
           <button
             type="submit"
-            className="inline-flex justify-center m-2 md:m-1 p-3 md:p-5 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg md:rounded-full"
+            className="inline-flex items-center m-2 md:m-1 p-3 md:p-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg md:rounded-full"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -150,9 +179,7 @@ export default function Search() {
       <SearchDialog
         isOpen={isDialogOpen}
         onDismiss={() => setDialogOpen(false)}
-        onCompleteForm={(form) =>
-          router.push(`/acf/${form.book?.code.toLowerCase()}/${form.chapter}`)
-        }
+        onCompleteForm={handleCompleteForm}
       />
     </div>
   );

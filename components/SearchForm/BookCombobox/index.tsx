@@ -7,11 +7,18 @@ import {
 } from '@reach/combobox';
 import '@reach/combobox/styles.css';
 import classnames from 'classnames';
-import { ChangeEvent, ChangeEventHandler, Ref, useState } from 'react';
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  Ref,
+  useEffect,
+  useState
+} from 'react';
 import { autocompleteMatch } from '../../../utils';
 import styles from './BookCombobox.module.css';
 
 export type BookComboboxProps = {
+  value?: string;
   results: any;
   inputRef: Ref<HTMLInputElement>;
   onSelect: (item: string) => void;
@@ -22,6 +29,7 @@ export type BookComboboxProps = {
 };
 
 export default function BookCombobox({
+  value = '',
   results,
   inputRef,
   onSelect,
@@ -30,13 +38,24 @@ export default function BookCombobox({
   onClick,
   onChange
 }: BookComboboxProps) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(value);
+  const [isReady, setReady] = useState(false);
   const bookResults = autocompleteMatch(results, search);
 
   function handleSelect(item: string) {
     setSearch(item);
     onSelect(item);
   }
+
+  function handleClick() {
+    onClick?.();
+    setReady(true);
+  }
+
+  useEffect(() => {
+    setSearch(value);
+    setReady(false);
+  }, [value]);
 
   return (
     <>
@@ -46,8 +65,8 @@ export default function BookCombobox({
         openOnFocus
       >
         <ComboboxInput
-          autoFocus
-          onClick={onClick}
+          value={search}
+          onClick={handleClick}
           onFocus={onFocus}
           onBlur={onBlur}
           ref={inputRef}
@@ -58,7 +77,7 @@ export default function BookCombobox({
             setSearch(e.target.value);
             onChange(e);
           }}
-          className="text-base w-full md:w-auto block text-gray-900 dark:text-gray-100 bg-transparent outline-none"
+          className="text-sm placeholder:font-light w-full md:w-auto block text-black  dark:text-gray-100 bg-transparent outline-none leading-none"
           aria-labelledby="book"
         />
         <ComboboxPopover portal={false} className={styles['search-popover']}>

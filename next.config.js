@@ -9,6 +9,15 @@ module.exports = {
     turboMode: true,
     eslint: true
   },
+  async redirects() {
+    return [
+      {
+        source: '/:version/:book',
+        destination: '/:version/:book/1',
+        permanent: false
+      }
+    ];
+  },
   async headers() {
     return [
       {

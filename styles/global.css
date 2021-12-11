@@ -31,7 +31,7 @@ html {
 
 .sticky-nav {
   position: sticky;
-  z-index: 10;
+  /* z-index: 10; */
   top: 0;
   backdrop-filter: saturate(180%) blur(20px);
   transition: background-color 0.1 ease-in-out;
@@ -56,24 +56,16 @@ input[type='email'] {
   appearance: none;
 }
 
-.prose p .highlight,
-.prose p ::selection {
-  @apply bg-black dark:bg-white text-white dark:text-black rounded;
-}
-
 .prose p span {
-  @apply py-2;
 }
 
 .prose p {
+  @apply inline;
   margin: 0 !important;
-  cursor: pointer;
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .prose p strong {
-  color: inherit !important;
+  @apply text-sm pl-2 text-gray-600 font-bold;
 }
 
 .search-popover[data-reach-combobox-popover] {

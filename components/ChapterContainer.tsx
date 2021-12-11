@@ -2,11 +2,20 @@ import { useTheme } from 'next-themes';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import books from '../data/bible-books';
+import { findBookByCode, findBookSiblingByCode } from '../utils';
+import Search from './SearchForm';
+import BookCombobox from './SearchForm/BookCombobox';
+import SearchDialog from './SearchForm/Dialog';
 
 export default function Container(props: any) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [isSearchDialogOpen, setSearchDialog] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
+  const chapter = Number(router.query.chapter);
+
+  const book = findBookByCode(router.query.book as string, books);
 
   // After mounting, we have access to the theme
   useEffect(() => setMounted(true), []);
@@ -17,6 +26,39 @@ export default function Container(props: any) {
     description: `Bible`,
     type: 'website',
     ...customMeta
+  };
+
+  const handleChangeChapter = (type: 'prev' | 'next') => {
+    if (!book) return;
+
+    const { version } = router.query;
+    const nextChapter = type === 'next' ? chapter + 1 : chapter - 1;
+
+    if (nextChapter > 0 && nextChapter <= book.chapters) {
+      return router.push({
+        pathname: router.pathname,
+        query: {
+          version,
+          book: book.code.toLowerCase(),
+          chapter: nextChapter
+        }
+      });
+    }
+
+    const siblingBook = findBookSiblingByCode(
+      book.code.toLowerCase() as string,
+      type,
+      books
+    );
+
+    return router.push({
+      pathname: router.pathname,
+      query: {
+        version,
+        book: siblingBook.code.toLowerCase(),
+        chapter: type === 'next' ? 1 : siblingBook.chapters
+      }
+    });
   };
 
   return (
@@ -38,17 +80,63 @@ export default function Container(props: any) {
           <meta property="article:published_time" content={meta.date} />
         )}
       </Head>
-      <nav className="flex items-center justify-between w-full max-w-4xl p-8 mx-auto my-0 text-gray-900 bg-white sticky-nav md:my-8 dark:bg-black bg-opacity-60 dark:text-gray-100">
+      <nav className="flex items-center gap-2 md:gap-0 md:justify-between w-full max-w-4xl p-2 md:py-3 md:px-8 mx-auto my-0 text-gray-900 bg-white sticky-nav dark:bg-black bg-opacity-60 dark:text-gray-100">
         <button
           onClick={() => router.push('/')}
-          className="text-4xl w-12 h-12 font-bold"
+          className="hidden md:block text-4xl w-12 h-12 font-bold"
         >
           B.
         </button>
         <button
+          onClick={() => router.push('/')}
+          className="text-black dark:text-white p-3 md:hidden"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+        <button
+          tabIndex={0}
+          onClick={() => setSearchDialog(true)}
+          className="md:hidden bg-gray-200 dark:bg-gray-800 py-3 rounded-full flex-1 flex justify-center items-center"
+        >
+          <span>
+            {book?.book_pt} {router.query.chapter}
+          </span>
+        </button>
+        <SearchDialog
+          isOpen={isSearchDialogOpen}
+          onCompleteForm={(form) => {
+            setSearchDialog(false);
+            router.push({
+              pathname: router.pathname,
+              query: {
+                version: router.query.version,
+                book: form.book.code.toLowerCase(),
+                chapter: form.chapter
+              }
+            });
+          }}
+          onDismiss={() => router}
+        />
+        <div className="hidden md:block">
+          <Search book={book?.book_pt} chapter={chapter} />
+        </div>
+        <button
           aria-label="Toggle Dark Mode"
           type="button"
-          className="w-10 h-10 p-3 bg-gray-200 rounded dark:bg-gray-800"
+          className="w-10 h-10 p-3 md:bg-gray-200 md:rounded md:dark:bg-gray-800"
           onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
         >
           {mounted && (
@@ -84,6 +172,43 @@ export default function Container(props: any) {
       >
         {children}
         {/* <Footer /> */}
+
+        <div>
+          <button
+            onClick={() => handleChangeChapter('prev')}
+            className="fixed text-black dark:text-white bottom-2 left-2 rounded-full bg-gray-200 dark:bg-gray-800 p-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => handleChangeChapter('next')}
+            className="fixed text-black dark:text-white bottom-2 right-2 rounded-full bg-gray-200 dark:bg-gray-800 p-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
       </main>
     </div>
   );

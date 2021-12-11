@@ -7,10 +7,11 @@ import {
   useRef,
   useState
 } from 'react';
+import { SearchForm } from '..';
 import books, { BibleBook } from '../../../data/bible-books';
 import { autocompleteMatch, findBookByName } from '../../../utils';
-import ChapterList from '../../ChapterList';
 import Portal from '../../Portal';
+import ChapterList from '../ChapterList';
 
 const normalizedBooks = books.map((book) => ({
   ...book,
@@ -46,16 +47,14 @@ function DialogHeader({
 
 interface State {
   step: number;
-  form: {
-    book?: BibleBook;
-    chapter?: number;
-  };
+  form: Partial<SearchForm>;
 }
 
 type Action =
   | { type: 'back' }
   | { type: 'next'; form?: State['form'] }
-  | { type: 'submit'; form?: State['form'] };
+  | { type: 'submit'; form?: State['form'] }
+  | { type: 'reset' };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -72,6 +71,8 @@ function reducer(state: State, action: Action): State {
       };
     case 'back':
       return { ...state, step: state.step - 1 };
+    case 'reset':
+      return initialState;
   }
 }
 
@@ -86,7 +87,7 @@ export default function SearchDialog({
   onDismiss
 }: {
   isOpen: boolean;
-  onCompleteForm: (form: State['form']) => void;
+  onCompleteForm: (form: SearchForm) => void;
   onDismiss: () => void;
 }) {
   const [
@@ -106,15 +107,18 @@ export default function SearchDialog({
   }
 
   function handleOnCloseDialog() {
-    dispatch({ type: 'back' });
-
     if (step === 1) {
       onDismiss();
     }
+
+    dispatch({ type: 'back' });
   }
 
   function handleChapterSelect(chapter: number) {
-    onCompleteForm({ book, chapter });
+    if (book) {
+      onCompleteForm({ book, chapter });
+      dispatch({ type: 'reset' });
+    }
   }
 
   function handleBookSelect(item: string) {
@@ -218,7 +222,6 @@ export default function SearchDialog({
                   {book?.book_pt}
                 </div>
               </DialogHeader>
-
               <ChapterList
                 onSelect={handleChapterSelect}
                 chapterCount={book?.chapters}

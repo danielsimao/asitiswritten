@@ -23,3 +23,25 @@ export function findBookByName(
       : book.book_pt === name
   );
 }
+
+export function findBookByCode(code: string, books: BibleBook[]) {
+  return books.find((book) => book.code.toLowerCase() === code);
+}
+
+export function findBookSiblingByCode(
+  code: string,
+  sibling: 'next' | 'prev',
+  books: BibleBook[]
+) {
+  const bookIndex = books.findIndex((book) => book.code.toLowerCase() === code);
+
+  const maxBookIndex = books.length - 1;
+
+  if (bookIndex === 0 && sibling === 'prev') {
+    return books[maxBookIndex];
+  } else if (bookIndex === maxBookIndex && sibling === 'next') {
+    return books[0];
+  } else {
+    return books[sibling === 'next' ? bookIndex + 1 : bookIndex - 1];
+  }
+}
