@@ -11,7 +11,7 @@ const normalizedBooks = books.map((book) => ({
   book_pt_norm: book.book_pt.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }));
 
-export type SearchForm = { book: BibleBook; chapter: number };
+export type SearchForm = { book: BibleBook; chapter: string };
 
 export default function Search({
   book: _book,
@@ -39,7 +39,7 @@ export default function Search({
 
     const body = {
       book: e.currentTarget.book.value,
-      chapter: Number(e.currentTarget.chapter.value)
+      chapter: e.currentTarget.chapter.value
     };
 
     if (!body.book) {
@@ -137,7 +137,7 @@ export default function Search({
               Capítulo
             </label>
             <ChapterInput
-              value={chapter}
+              value={chapter?.toString()}
               inputRef={chapterInputRef}
               onClick={() => {
                 if (!book) {
@@ -156,7 +156,7 @@ export default function Search({
           </div>
           <button
             type="submit"
-            className="inline-flex items-center m-2 md:m-1 p-3 md:p-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg md:rounded-full"
+            className="inline-flex items-center m-2 md:m-1 p-3 md:p-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg md:rounded-full justify-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +178,7 @@ export default function Search({
       </form>
       <SearchDialog
         isOpen={isDialogOpen}
-        onDismiss={() => setDialogOpen(false)}
+        onClose={() => setDialogOpen(false)}
         onCompleteForm={handleCompleteForm}
       />
     </div>

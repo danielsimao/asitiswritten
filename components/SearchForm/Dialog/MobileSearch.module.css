@@ -1,7 +1,0 @@
-.search-mobile[data-reach-dialog-content] {
-  @apply rounded-full md:hidden;
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-}

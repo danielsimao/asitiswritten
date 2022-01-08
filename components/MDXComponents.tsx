@@ -1,6 +1,6 @@
 const BibleVerse = (props: any) => (
   <p>
-    <span {...props}></span>
+    <span {...props}></span>{' '}
   </p>
 );
 const MDXComponents = {

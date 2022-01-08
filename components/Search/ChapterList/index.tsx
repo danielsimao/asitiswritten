@@ -1,22 +1,18 @@
 import { ComboboxList, ComboboxOption } from '@reach/combobox';
-import styles from './ChapterList.module.css';
-import { PropsWithChildren } from 'react';
 
 interface ChapterListProps {
   chapterCount?: number;
-  onSelect: (chapter: number) => void;
+  onSelect: (chapter: string) => void;
   isCombobox?: boolean;
 }
 
-function ChapterButton({
-  chapter,
-  onClick,
-  isCombobox
-}: {
-  chapter: number;
-  onClick: (chapter: number) => void;
+type ChapterButtonProps = {
+  chapter: string;
+  onClick: (chapter: string) => void;
   isCombobox?: boolean;
-}) {
+};
+
+function ChapterButton({ chapter, onClick, isCombobox }: ChapterButtonProps) {
   if (isCombobox) {
     return (
       <ComboboxOption
@@ -50,12 +46,12 @@ export default function ChapterList({
 
   const chapters = Array(chapterCount)
     .fill(null)
-    .map((_, i) => i + 1);
+    .map((_, i) => (i + 1).toString());
 
   if (isCombobox) {
     return (
       <ComboboxList
-        className="grid grid grid-cols-7 justify-items-center gap-y-4 grid-flow-row max-h-72 overflow-auto"
+        className="grid grid-cols-7 justify-items-center gap-y-4 grid-flow-row max-h-72 overflow-auto"
         aria-labelledby="chapter"
       >
         {chapters.map((chapter) => (
@@ -71,7 +67,10 @@ export default function ChapterList({
   }
 
   return (
-    <div className="grid grid grid-cols-6 justify-items-center gap-y-4 grid-flow-row p-6">
+    <div
+      className="grid grid-cols-6 justify-items-center gap-y-4 grid-flow-row p-6 overflow-auto"
+      style={{ maxHeight: 'calc(100% - 61px)' }}
+    >
       {chapters.map((chapter) => (
         <ChapterButton key={chapter} chapter={chapter} onClick={onSelect} />
       ))}

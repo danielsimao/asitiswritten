@@ -1,6 +1,5 @@
 import Container from '../components/Container';
-import Search from '../components/SearchForm';
-import MobileSearch from '../components/SearchForm/Dialog';
+import Search from '../components/Search';
 
 export default function Home() {
   return (

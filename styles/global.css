@@ -29,25 +29,6 @@ html {
   min-height: 100vh;
 }
 
-.sticky-nav {
-  position: sticky;
-  /* z-index: 10; */
-  top: 0;
-  backdrop-filter: saturate(180%) blur(20px);
-  transition: background-color 0.1 ease-in-out;
-}
-
-.skip-nav {
-  @apply absolute px-4 py-2 transition-transform duration-200 transform -translate-y-12 left-1/4 focus:top-4 focus:translate-y-3 -top-8;
-}
-
-@supports not (backdrop-filter: none) {
-  .sticky-nav {
-    backdrop-filter: none;
-    @apply bg-opacity-100;
-  }
-}
-
 /* Remove Safari input shadow on mobile */
 input[type='text'],
 input[type='email'] {
@@ -56,16 +37,17 @@ input[type='email'] {
   appearance: none;
 }
 
-.prose p span {
-}
-
 .prose p {
   @apply inline;
   margin: 0 !important;
 }
 
 .prose p strong {
-  @apply text-sm pl-2 text-gray-600 font-bold;
+  @apply text-[10px] text-gray-600 font-light;
+}
+
+.prose-dark p strong {
+  @apply text-[10px] text-gray-300 font-light;
 }
 
 .search-popover[data-reach-combobox-popover] {

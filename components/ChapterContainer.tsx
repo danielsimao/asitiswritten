@@ -4,9 +4,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import books from '../data/bible-books';
 import { findBookByCode, findBookSiblingByCode } from '../utils';
-import Search from './SearchForm';
-import BookCombobox from './SearchForm/BookCombobox';
-import SearchDialog from './SearchForm/Dialog';
+import Search from './Search';
+import SearchDialog from './Search/Dialog';
 
 export default function Container(props: any) {
   const router = useRouter();
@@ -107,7 +106,6 @@ export default function Container(props: any) {
           </svg>
         </button>
         <button
-          tabIndex={0}
           onClick={() => setSearchDialog(true)}
           className="md:hidden bg-gray-200 dark:bg-gray-800 py-3 rounded-full flex-1 flex justify-center items-center"
         >
@@ -115,21 +113,7 @@ export default function Container(props: any) {
             {book?.book_pt} {router.query.chapter}
           </span>
         </button>
-        <SearchDialog
-          isOpen={isSearchDialogOpen}
-          onCompleteForm={(form) => {
-            setSearchDialog(false);
-            router.push({
-              pathname: router.pathname,
-              query: {
-                version: router.query.version,
-                book: form.book.code.toLowerCase(),
-                chapter: form.chapter
-              }
-            });
-          }}
-          onDismiss={() => router}
-        />
+
         <div className="hidden md:block">
           <Search book={book?.book_pt} chapter={chapter} />
         </div>
@@ -168,7 +152,7 @@ export default function Container(props: any) {
       </nav>
       <main
         id="skip"
-        className="flex flex-col justify-center px-8 bg-white dark:bg-black"
+        className="flex flex-col justify-center px-6 bg-white dark:bg-black"
       >
         {children}
         {/* <Footer /> */}
@@ -210,6 +194,20 @@ export default function Container(props: any) {
           </button>
         </div>
       </main>
+      <SearchDialog
+        isOpen={isSearchDialogOpen}
+        onCompleteForm={(form) => {
+          router.push({
+            pathname: router.pathname,
+            query: {
+              version: router.query.version,
+              book: form.book.code.toLowerCase(),
+              chapter: form.chapter
+            }
+          });
+        }}
+        onClose={() => setSearchDialog(false)}
+      />
     </div>
   );
 }
