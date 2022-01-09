@@ -13,9 +13,8 @@ export default function Container(props: any) {
   const { children, ...customMeta } = props;
   const router = useRouter();
   const meta = {
-    title: 'As It Is Written',
-    description: `Bible`,
-    image: 'https://leerob.io/static/images/banner.png',
+    title: 'The Bible',
+    description: 'Bible',
     type: 'website',
     ...customMeta
   };
@@ -26,23 +25,12 @@ export default function Container(props: any) {
         <title>{meta.title}</title>
         <meta name="robots" content="follow, index" />
         <meta content={meta.description} name="description" />
-        {/* <meta property="og:url" content={`https://leerob.io${router.asPath}`} />
-        <link rel="canonical" href={`https://leerob.io${router.asPath}`} /> */}
         <meta property="og:type" content={meta.type} />
-        <meta property="og:site_name" content="As It Is Written" />
+        <meta property="og:site_name" content="The Bible" />
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.image} />
-        {/* <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@leeerob" />
-        <meta name="twitter:title" content={meta.title} />
-        <meta name="twitter:description" content={meta.description} />
-        <meta name="twitter:image" content={meta.image} /> */}
-        {/* {meta.date && (
-          <meta property="article:published_time" content={meta.date} />
-        )} */}
       </Head>
-      {/* sticky-nav */}
       <nav className="flex items-center justify-between w-full max-w-4xl p-8 mx-auto my-0 text-gray-900 bg-white  dark:bg-black bg-opacity-60 dark:text-gray-100">
         <button
           onClick={() => router.push('/')}
@@ -88,7 +76,6 @@ export default function Container(props: any) {
         className="flex flex-col justify-center px-8 bg-white dark:bg-black"
       >
         {children}
-        {/* <Footer /> */}
       </main>
     </div>
   );

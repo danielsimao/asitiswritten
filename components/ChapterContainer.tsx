@@ -21,7 +21,7 @@ export default function Container(props: any) {
 
   const { children, ...customMeta } = props;
   const meta = {
-    title: 'As It Is Written',
+    title: 'The Bible',
     description: `Bible`,
     type: 'website',
     ...customMeta
@@ -67,7 +67,7 @@ export default function Container(props: any) {
         <meta name="robots" content="follow, index" />
         <meta content={meta.description} name="description" />
         <meta property="og:type" content={meta.type} />
-        <meta property="og:site_name" content="Lee Robinson" />
+        <meta property="og:site_name" content="The Bible" />
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:image" content={meta.image} />
@@ -155,8 +155,6 @@ export default function Container(props: any) {
         className="flex flex-col justify-center px-6 bg-white dark:bg-black"
       >
         {children}
-        {/* <Footer /> */}
-
         <div>
           <button
             onClick={() => handleChangeChapter('prev')}
