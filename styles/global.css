@@ -43,11 +43,13 @@ input[type='email'] {
 }
 
 .prose p strong {
-  @apply text-[10px] text-gray-600 font-light;
+  font-size: 65%;
+  line-height: 100%;
+  @apply text-gray-600 font-light;
 }
 
 .prose-dark p strong {
-  @apply text-[10px] text-gray-300 font-light;
+  @apply text-gray-300 font-light;
 }
 
 .search-popover[data-reach-combobox-popover] {

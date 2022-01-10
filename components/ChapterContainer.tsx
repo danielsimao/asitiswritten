@@ -1,23 +1,32 @@
 import { useTheme } from 'next-themes';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import books from '../data/bible-books';
+import useLocalStorage from '../lib/hooks/use-local-storage';
 import { findBookByCode, findBookSiblingByCode } from '../utils';
+import OptionsPopover, { OptionsPopoverProps } from './Chapter/OptionsPopover';
 import Search from './Search';
 import SearchDialog from './Search/Dialog';
 
+const fonts = [
+  'text-xs',
+  'text-sm',
+  'text-base',
+  'text-lg',
+  'text-xl',
+  'text-2xl',
+  'text-3xl'
+];
+
 export default function Container(props: any) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [isSearchDialogOpen, setSearchDialog] = useState(false);
-  const { resolvedTheme, setTheme } = useTheme();
+  const [font, setFont] = useLocalStorage<number>('fontSize', 2);
   const chapter = Number(router.query.chapter);
+  let versesContainerRef = useRef<Element | null>();
 
   const book = findBookByCode(router.query.book as string, books);
-
-  // After mounting, we have access to the theme
-  useEffect(() => setMounted(true), []);
 
   const { children, ...customMeta } = props;
   const meta = {
@@ -59,6 +68,25 @@ export default function Container(props: any) {
       }
     });
   };
+
+  const handleChangeFont: OptionsPopoverProps['onChangeFont'] = (font) => {
+    if (font >= 0 && font <= fonts.length - 1) {
+      setFont(font);
+    }
+  };
+
+  useEffect(() => {
+    versesContainerRef.current = document.querySelector('main #verses');
+  }, []);
+
+  useEffect(() => {
+    versesContainerRef.current?.classList.add(fonts[font]);
+
+    const previousClass = versesContainerRef.current?.classList.item(
+      versesContainerRef.current?.classList.length - 2
+    );
+    versesContainerRef.current?.classList.remove(previousClass as string);
+  }, [font]);
 
   return (
     <div className="bg-white dark:bg-black">
@@ -113,45 +141,13 @@ export default function Container(props: any) {
             {book?.book_pt} {router.query.chapter}
           </span>
         </button>
-
         <div className="hidden md:block">
           <Search book={book?.book_pt} chapter={chapter} />
         </div>
-        <button
-          aria-label="Toggle Dark Mode"
-          type="button"
-          className="w-10 h-10 p-3 md:bg-gray-200 md:rounded md:dark:bg-gray-800"
-          onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-        >
-          {mounted && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              stroke="currentColor"
-              className="w-4 h-4 text-gray-800 dark:text-gray-200"
-            >
-              {resolvedTheme === 'dark' ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                />
-              )}
-            </svg>
-          )}
-        </button>
+        <OptionsPopover font={font} onChangeFont={handleChangeFont} />
       </nav>
       <main
-        id="skip"
+        id="chapter"
         className="flex flex-col justify-center px-6 bg-white dark:bg-black"
       >
         {children}
