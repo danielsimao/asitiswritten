@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import books, { BibleBook } from '../../data/bible-books';
 import { findBookByName } from '../../utils';
-import BookCombobox, { BookComboboxProps } from './BookCombobox';
+import BookCombobox, { BookComboboxProps } from '../BookCombobox';
 import ChapterInput from './ChapterInput';
 import SearchDialog from './Dialog';
 
@@ -99,14 +99,14 @@ export default function Search({
     'text-xs text-gray-900 dark:text-gray-100 font-semibold';
 
   return (
-    <div className="border border-gray-300 dark:border-gray-800 rounded-lg md:rounded-full w-full md:w-auto bg-white dark:bg-gray-800">
+    <div className="w-full rounded-lg border border-gray-300 bg-white dark:border-gray-800 dark:bg-gray-800 md:w-auto md:rounded-full">
       <form
         ref={formRef}
         autoComplete="off"
         onSubmit={handleSubmit}
-        className="flex flex-auto flex-col md:flex-row relative"
+        className="relative flex flex-auto flex-col md:flex-row"
       >
-        <div className="pl-4 md:pl-8 pr-4 py-2 md:rounded-full md:focus-within:shadow-[0px_6px_20px_rgb(0,0,0,0.3)] flex flex-col justify-center gap-1">
+        <div className="flex flex-col justify-center gap-1 py-2 pl-4 pr-4 md:rounded-full md:pl-8 md:focus-within:shadow-[0px_6px_20px_rgb(0,0,0,0.3)]">
           <label className={labelClassName} htmlFor="book">
             Livro
           </label>
@@ -114,7 +114,7 @@ export default function Search({
             onClick={() => setDialogOpen(true)}
             readOnly
             placeholder="O que vai ler?"
-            className="text-sm w-full md:w-auto block md:hidden text-gray-900 dark:text-gray-100 bg-transparent outline-none"
+            className="block w-full bg-transparent text-sm text-gray-900 outline-none dark:text-gray-100 md:hidden md:w-auto"
           />
           <BookCombobox
             value={book}
@@ -127,12 +127,12 @@ export default function Search({
           />
         </div>
         <div
-          className={`border-t md:border-l mx-4 md:my-2 md:mx-0 border-gray-300 dark:border-black ${
+          className={`mx-4 border-t border-gray-300 dark:border-black md:my-2 md:mx-0 md:border-l ${
             !hasDivider ? 'md:invisible' : ''
           }`}
         />
         <div className="flex flex-col md:flex-row md:rounded-full md:focus-within:shadow-[0px_6px_20px_rgb(0,0,0,0.3)]">
-          <div className="px-4 py-2 flex flex-col justify-center gap-1">
+          <div className="flex flex-col justify-center gap-1 px-4 py-2">
             <label className={labelClassName} htmlFor="chapter">
               Capítulo
             </label>
@@ -156,11 +156,11 @@ export default function Search({
           </div>
           <button
             type="submit"
-            className="inline-flex items-center m-2 md:m-1 p-3 md:p-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg md:rounded-full justify-center"
+            className="m-2 inline-flex items-center justify-center rounded-lg bg-gray-100 p-3 text-gray-900 dark:bg-gray-700 dark:text-gray-100 md:m-1 md:rounded-full md:p-3"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 hidden md:block"
+              className="hidden h-6 w-6 md:block"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

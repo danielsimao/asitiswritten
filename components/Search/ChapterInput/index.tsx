@@ -10,9 +10,6 @@ type ChapterInputProps = {
   value?: string;
   book?: string;
   onSelect?: (chapter: number) => void;
-  onFocus: () => void;
-  onBlur: () => void;
-  onClick: () => void;
   inputRef: Ref<HTMLInputElement>;
 };
 
@@ -20,9 +17,6 @@ export default function ChapterInput({
   value: _value,
   book,
   onSelect,
-  onBlur,
-  onFocus,
-  onClick,
   inputRef
 }: ChapterInputProps) {
   const [value, setValue] = useState<string | undefined>(_value);
@@ -36,7 +30,6 @@ export default function ChapterInput({
   }
 
   function handleClick() {
-    onClick();
     setReady(true);
   }
 
@@ -46,42 +39,32 @@ export default function ChapterInput({
   }, [_value]);
 
   return (
-    <>
-      <input
-        onClick={onClick}
+    <Combobox onSelect={(val) => handleSelect(val)} openOnFocus>
+      <ComboboxInput
+        value={value?.toString()}
+        ref={inputRef}
         readOnly={!book}
+        onClick={handleClick}
+        onChange={(e) => setValue(e.target.value)}
+        id="chapter"
+        name="chapter"
         placeholder="Escolha um capítulo"
-        className="block md:hidden text-sm text-gray-900 dark:text-gray-100 bg-transparent outline-none"
+        className="hidden bg-transparent text-sm leading-none text-gray-900 outline-none placeholder:font-light dark:text-gray-100 md:block"
+        aria-labelledby="chapter"
       />
-      <Combobox onSelect={(val) => handleSelect(val)} openOnFocus>
-        <ComboboxInput
-          value={value?.toString()}
-          ref={inputRef}
-          readOnly={!book}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          onClick={handleClick}
-          onChange={(e) => setValue(e.target.value)}
-          id="chapter"
-          name="chapter"
-          placeholder="Escolha um capítulo"
-          className="hidden md:block text-sm text-gray-900 dark:text-gray-100 placeholder:font-light bg-transparent outline-none leading-none"
-          aria-labelledby="chapter"
-        />
-        {isReady && (
-          <ComboboxPopover
-            portal={false}
-            className={styles['search-popover']}
-            style={{ visibility: !bibleBook ? 'hidden' : undefined }}
-          >
-            <ChapterList
-              isCombobox
-              chapterCount={bibleBook?.chapters}
-              onSelect={handleSelect}
-            />
-          </ComboboxPopover>
-        )}
-      </Combobox>
-    </>
+      {isReady && (
+        <ComboboxPopover
+          portal={false}
+          className={styles['search-popover']}
+          style={{ visibility: !bibleBook ? 'hidden' : undefined }}
+        >
+          <ChapterList
+            isCombobox
+            chapterCount={bibleBook?.chapters}
+            onSelect={handleSelect}
+          />
+        </ComboboxPopover>
+      )}
+    </Combobox>
   );
 }

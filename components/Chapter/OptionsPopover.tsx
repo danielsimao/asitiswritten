@@ -14,23 +14,23 @@ export default function OptionsPopover({
 
   return (
     <Popover className="relative">
-      <Popover.Button className="w-10 h-10 p-2 md:bg-gray-200 md:rounded md:dark:bg-gray-800">
+      <Popover.Button className="h-10 w-10 p-2 md:rounded md:bg-[#E28C5B] md:dark:bg-gray-800">
         aA
       </Popover.Button>
 
-      <Popover.Panel className="absolute z-10 w-auto max-w-sm px-4 mt-3 right-0 sm:px-0 lg:max-w-3xl">
+      <Popover.Panel className="absolute right-0 z-10 mt-3 w-auto max-w-sm px-4 sm:px-0 lg:max-w-3xl">
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-          <div className="p-4 bg-gray-200 dark:bg-gray-800 flex gap-2">
+          <div className="flex gap-2 bg-gray-200 p-4 dark:bg-gray-800">
             <div className="flex">
               <button
                 onClick={() => onChangeFont(font - 1)}
-                className="bg-gray-100 dark:bg-gray-700 py-2 px-6 border-r-2 border-gray-200 dark:border-gray-800 rounded-l"
+                className="rounded-l border-r-2 border-gray-200 bg-gray-100 py-2 px-6 dark:border-gray-800 dark:bg-gray-700"
               >
                 a
               </button>
               <button
                 onClick={() => onChangeFont(font + 1)}
-                className="bg-gray-100 dark:bg-gray-700 py-2 px-6 rounded-r"
+                className="rounded-r bg-gray-100 py-2 px-6 dark:bg-gray-700"
               >
                 A
               </button>
@@ -38,7 +38,7 @@ export default function OptionsPopover({
             <button
               aria-label="Toggle Dark Mode"
               type="button"
-              className="w-10 h-10 p-3 rounded bg-gray-100 dark:bg-gray-700"
+              className="h-10 w-10 rounded bg-gray-100 p-3 dark:bg-gray-700"
               onClick={() =>
                 setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
               }
@@ -48,7 +48,7 @@ export default function OptionsPopover({
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 stroke="currentColor"
-                className="w-4 h-4 text-gray-800 dark:text-gray-200"
+                className="h-4 w-4 text-gray-800 dark:text-gray-200"
               >
                 {resolvedTheme === 'dark' ? (
                   <path

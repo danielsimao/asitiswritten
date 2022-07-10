@@ -1,0 +1,54 @@
+.select :global(.select__control) {
+  border: 0px;
+  outline: none;
+  min-height: 20px;
+  box-shadow: none;
+  background: inherit;
+}
+
+.select :global(.select__placeholder) {
+  @apply text-slate-400;
+}
+
+.select :global(.select__value-container),
+.select :global(.select__input-container) {
+  padding: 0;
+}
+
+.select :global(.select__placeholder),
+.select :global(.select__input-container),
+.select :global(.select__single-value) {
+  margin: 0;
+  background: inherit;
+}
+
+/* Menu */
+
+.select :global(.select__menu) {
+  @apply -left-8 rounded-xl bg-white;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  width: calc(100% + 3rem);
+  overflow: hidden;
+}
+
+:global(.dark) .select :global(.select__menu) {
+  @apply border-0 bg-gray-800;
+}
+
+.select :global(.select__option) {
+  @apply bg-white text-base text-gray-900;
+  padding: 0.5rem 1.5rem;
+}
+
+:global(.dark) .list :global(.rw-list-option) {
+  @apply bg-gray-800 text-gray-100;
+}
+
+.select :global(.select__option--is-focused) {
+  @apply border-gray-100 bg-gray-100;
+}
+
+:global(.dark) .select :global(.select__option--is-focused) {
+  @apply border-gray-900 bg-gray-900;
+}
