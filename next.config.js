@@ -1,10 +1,20 @@
 /** @type {import('next').NextConfig} */
-const runtimeCaching = require('next-pwa/cache');
+const getBuildId = require('./utils/build-id.js');
+const getStaticPrecacheEntries = require('./utils/static-pre-cache.js');
+const getGeneratedPrecacheEntries = require('./utils/pre-cache.js');
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development'
+  disable: process.env.NODE_ENV === 'development',
+  additionalManifestEntries: [
+    ...getStaticPrecacheEntries({
+      // exclude icon-related files from the precache since they are platform specific
+      // note: no need to pass publicExcludes to next-pwa, it's not used for anything else
+      publicExcludes: ['!*.png', '!*.ico', '!browserconfig.xml']
+    }),
+    ...getGeneratedPrecacheEntries(getBuildId())
+  ]
 });
 
 module.exports = withPWA({
@@ -33,7 +43,8 @@ module.exports = withPWA({
         headers: securityHeaders
       }
     ];
-  }
+  },
+  generateBuildId: getBuildId
   // webpack: (config, { dev, isServer }) => {
   //   if (isServer) {
   //     require('./scripts/generate-sitemap');
