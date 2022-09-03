@@ -1,23 +1,31 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
-  future: {
-    webpack5: true,
-    strictPostcssConfiguration: true
-  },
+const runtimeCaching = require('next-pwa/cache');
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+});
+
+module.exports = withPWA({
+  // future: {
+  //   webpack5: true,
+  //   strictPostcssConfiguration: true
+  // },
   reactStrictMode: true,
-  experimental: {
-    turboMode: true,
-    eslint: true
-  },
-  async redirects() {
-    return [
-      {
-        source: '/:version/:book',
-        destination: '/:version/:book/1',
-        permanent: false
-      }
-    ];
-  },
+  // experimental: {
+  //   turboMode: true,
+  //   eslint: true
+  // },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/:version/:book',
+  //       destination: '/:version/:book/1',
+  //       permanent: false
+  //     }
+  //   ];
+  // },
   async headers() {
     return [
       {
@@ -25,24 +33,24 @@ module.exports = {
         headers: securityHeaders
       }
     ];
-  },
-  webpack: (config, { dev, isServer }) => {
-    if (isServer) {
-      require('./scripts/generate-sitemap');
-    }
-
-    // Replace React with Preact only in client production build
-    if (!dev && !isServer) {
-      Object.assign(config.resolve.alias, {
-        react: 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-        'react-dom': 'preact/compat'
-      });
-    }
-
-    return config;
   }
-};
+  // webpack: (config, { dev, isServer }) => {
+  //   if (isServer) {
+  //     require('./scripts/generate-sitemap');
+  //   }
+
+  //   // Replace React with Preact only in client production build
+  //   if (!dev && !isServer) {
+  //     Object.assign(config.resolve.alias, {
+  //       react: 'preact/compat',
+  //       'react-dom/test-utils': 'preact/test-utils',
+  //       'react-dom': 'preact/compat'
+  //     });
+  //   }
+
+  //   return config;
+  // }
+});
 
 // https://securityheaders.com
 // const ContentSecurityPolicy = `

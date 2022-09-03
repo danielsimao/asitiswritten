@@ -6,10 +6,11 @@ import MDXComponents from '../components/MDXComponents';
 import { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const C = Component as any;
   return (
     <ThemeProvider attribute="class">
       <MDXProvider components={MDXComponents}>
-        <Component {...pageProps} />
+        <C {...pageProps} />
       </MDXProvider>
     </ThemeProvider>
   );
