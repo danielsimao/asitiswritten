@@ -6,6 +6,11 @@ const staticPages = [
     route: '/',
     precacheHtml: false, // next-pwa already caches the home page
     precacheJson: false // no props
+  },
+  {
+    route: '/acf/gen/1',
+    precacheHtml: true, // next-pwa already caches the home page
+    precacheJson: true // no props
   }
 ];
 
@@ -125,7 +130,7 @@ function getGeneratedPrecacheEntries(buildId) {
 
   const biblePages = getBiblePages();
 
-  const pages = [...staticPages, ...biblePages];
+  const pages = [...staticPages];
 
   return pages
     .map((page) => getPageEntries(buildId, page))
